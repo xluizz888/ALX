@@ -1,3 +1,67 @@
+local autenticador = loadstring(game:HttpGet("https://pastefy.app/YcQavgq8/raw"))()
+
+local guiFoiAberta = false
+local dadosUsuario = nil
+
+local function iniciarAutenticacao()
+    if guiFoiAberta then return end
+    
+    local hasAccess, userData = autenticador.checkAccess()
+    guiFoiAberta = true
+    
+    if hasAccess then
+        dadosUsuario = userData
+        return true, userData
+    end
+    
+    return false, nil
+end
+
+local hasAccess, userData = iniciarAutenticacao()
+
+if hasAccess then
+    dadosUsuario = userData
+else
+    print("⏳ Aguardando autenticação...")
+    
+    repeat
+        task.wait(1)
+
+                if autenticador.isAuthenticated and autenticador.isAuthenticated() then
+            hasAccess = true
+            dadosUsuario = autenticador.userData
+            break
+        end
+        
+        local playerGui = game.Players.LocalPlayer:FindFirstChild("PlayerGui")
+        if playerGui then
+            local temGUI = false
+            for _, child in ipairs(playerGui:GetChildren()) do
+                if child.Name == "AuthSystem" or child.Name == "KeyValidator" then
+                    temGUI = true
+                    break
+                end
+            end
+            -- Se não tem GUI e não autenticou, reabre
+            if not temGUI and not hasAccess then
+                autenticador.checkAccess()
+                guiFoiAberta = true
+            end
+        end
+        
+    until hasAccess
+end
+
+-- ============================================================
+-- ✅ AUTENTICADO
+-- ============================================================
+
+print("✅ AUTENTICADO!")
+if dadosUsuario then
+    print("👤 " .. dadosUsuario.owner)
+    print("📅 " .. dadosUsuario.remaining_days .. " dias")
+end
+
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
