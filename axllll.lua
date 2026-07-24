@@ -1,4 +1,4 @@
-local autenticador = loadstring(game:HttpGet("https://pastefy.app/2zLnkSTC/raw"))()
+local autenticador = loadstring(game:HttpGet("https://pastefy.app/VGzeCDLx/raw"))()
 
 local guiFoiAberta = false
 local dadosUsuario = nil
